@@ -29,19 +29,18 @@ POSSIBILITY OF SUCH DAMAGE.
 
 package net.imglib2.ops.operation.unary.real;
 
-import net.imglib2.ops.UnaryOperation;
-import net.imglib2.type.numeric.ComplexType;
+import net.imglib2.type.numeric.RealType;
 
 /**
- * Sets the real component of an output complex number -1, 0, or 1 depending
- * upon the relationship of the real component of an input complex number to
+ * Sets the real component of an output real number -1, 0, or 1 depending
+ * upon the relationship of the real component of an input real number to
  * zero. -1 if less than zero. 1 if greater than zero. 0 otherwise.
  * 
  * @author Barry DeZonia
  * 
  */
-public final class RealSign<I extends ComplexType<I>, O extends ComplexType<O>>
-	implements UnaryOperation<I,O>
+public final class RealSign<I extends RealType<I>, O extends RealType<O>>
+	implements RealUnaryOperation<I,O>
 {
 	@Override
 	public O compute(I x, O output) {

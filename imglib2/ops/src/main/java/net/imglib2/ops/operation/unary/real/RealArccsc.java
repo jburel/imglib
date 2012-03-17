@@ -29,21 +29,20 @@ POSSIBILITY OF SUCH DAMAGE.
 
 package net.imglib2.ops.operation.unary.real;
 
-import net.imglib2.ops.UnaryOperation;
-import net.imglib2.type.numeric.ComplexType;
+import net.imglib2.type.numeric.RealType;
 import net.imglib2.type.numeric.real.DoubleType;
 
 //verified formula with Mathworld's definition for Inverse Cosecant
 
 /**
- * Sets the real component of an output complex number to the inverse cosecant
- * of the real component of an input complex number.
+ * Sets the real component of an output real number to the inverse cosecant
+ * of the real component of an input real number.
  * 
  * @author Barry DeZonia
  * 
  */
-public final class RealArccsc<I extends ComplexType<I>, O extends ComplexType<O>>
-	implements UnaryOperation<I,O>
+public final class RealArccsc<I extends RealType<I>, O extends RealType<O>>
+	implements RealUnaryOperation<I,O>
 {
 	private static final RealArccos<DoubleType,DoubleType> acos =
 			new RealArccos<DoubleType,DoubleType>();
