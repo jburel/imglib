@@ -45,14 +45,16 @@ import net.imglib2.ops.PointSet;
  * 
  * @author Barry DeZonia
  */
-public class PointInputIteratorFactory implements InputIteratorFactory<long[]>{
+public class PointInputIteratorFactory implements InputIteratorFactory< long[] >
+{
 
-	public PointInputIteratorFactory() {
-	}
+	public PointInputIteratorFactory()
+	{}
 
 	@Override
-	public InputIterator<long[]> createInputIterator(PointSet ps) {
-		return new PointInputIterator(ps);
+	public InputIterator< long[] > createInputIterator( PointSet ps )
+	{
+		return new PointInputIterator( ps );
 	}
 
 }

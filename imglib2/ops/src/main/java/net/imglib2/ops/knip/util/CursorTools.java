@@ -89,30 +89,6 @@ public class CursorTools
 		return true;
 	}
 
-	// public static boolean equalIterationOrder(IterableRealInterval<?> a,
-	// IterableRealInterval<?> b) {
-	// // If one is not an image
-	// if (!(a instanceof Img) || !(b instanceof Img))
-	// return a.equalIterationOrder(b);
-	// // Cropped, Shifted, SubImg special types must have same
-	// // intervals and
-	// // source images with equal iteration order
-	// if (a instanceof SubImgPlus && b instanceof SubImgPlus)
-	// return equalInterval(a, b)
-	// && equalIterationOrder(
-	// ((SubImgPlus<?>) a)
-	// .getImg(),
-	// ((SubImgPlus<?>) b)
-	// .getImg());
-	// // If not a pair of special types unpack the image plus type
-	// if (b instanceof ImgPlus)
-	// return a.equalIterationOrder(((ImgPlus<?>) b).getImg());
-	// if (a instanceof ImgPlus)
-	// return b.equalIterationOrder(((ImgPlus<?>) a).getImg());
-	// // Default image test
-	// return a.equalIterationOrder(b);
-	// }
-
 	public static boolean equalInterval( RealInterval a, RealInterval... bs )
 	{
 		for ( int i = 1; i < bs.length; i++ )

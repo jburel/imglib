@@ -60,36 +60,34 @@ import net.imglib2.type.numeric.RealType;
  * 
  * @author hornm, University of Konstanz
  */
-public class PartialProjectionNodeTools {
+public class PartialProjectionNodeTools
+{
 
-        public static <T extends RealType<T>> Img<T> partialMaximumProjection(
-                        Img<T> img, int projDim, int steps) {
+	public static < T extends RealType< T >> Img< T > partialMaximumProjection( Img< T > img, int projDim, int steps )
+	{
 
-                Img<T> res = img.copy();
-                Cursor<T> resCur = res.localizingCursor();
-                RandomAccess<T> srcRA = img.randomAccess();
-                while (resCur.hasNext()) {
-                        resCur.fwd();
-                        srcRA.setPosition(resCur);
-                        for (int i = 1; i <= steps; i++) {
-                                srcRA.setPosition(
-                                                (resCur.getLongPosition(projDim) + i)
-                                                                % img.dimension(projDim),
-                                                projDim);
-                                if (srcRA.get().compareTo(resCur.get()) > 0) {
-                                        resCur.get().set(srcRA.get());
-                                }
-                                srcRA.setPosition(
-                                                (resCur.getLongPosition(projDim)
-                                                                + img.dimension(projDim) - i)
-                                                                % img.dimension(projDim),
-                                                projDim);
-                                if (srcRA.get().compareTo(resCur.get()) > 0) {
-                                        resCur.get().set(srcRA.get());
-                                }
-                        }
-                }
-                return res;
-        }
+		Img< T > res = img.copy();
+		Cursor< T > resCur = res.localizingCursor();
+		RandomAccess< T > srcRA = img.randomAccess();
+		while ( resCur.hasNext() )
+		{
+			resCur.fwd();
+			srcRA.setPosition( resCur );
+			for ( int i = 1; i <= steps; i++ )
+			{
+				srcRA.setPosition( ( resCur.getLongPosition( projDim ) + i ) % img.dimension( projDim ), projDim );
+				if ( srcRA.get().compareTo( resCur.get() ) > 0 )
+				{
+					resCur.get().set( srcRA.get() );
+				}
+				srcRA.setPosition( ( resCur.getLongPosition( projDim ) + img.dimension( projDim ) - i ) % img.dimension( projDim ), projDim );
+				if ( srcRA.get().compareTo( resCur.get() ) > 0 )
+				{
+					resCur.get().set( srcRA.get() );
+				}
+			}
+		}
+		return res;
+	}
 
 }

@@ -68,90 +68,101 @@ import net.imglib2.view.IterableRandomAccessibleInterval;
  * 
  * @author dietzc, University of Konstanz
  */
-public class SubLabeling<L extends Comparable<L>> extends
-                IterableRandomAccessibleInterval<LabelingType<L>> implements
-                Labeling<L> {
+public class SubLabeling< L extends Comparable< L >> extends IterableRandomAccessibleInterval< LabelingType< L >> implements Labeling< L >
+{
 
-        protected LabelingROIStrategy<L, ? extends Labeling<L>> m_strategy;
+	protected LabelingROIStrategy< L, ? extends Labeling< L >> m_strategy;
 
-        private Labeling<L> m_src;
+	private Labeling< L > m_src;
 
-        private long[] m_origin;
+	private long[] m_origin;
 
-        /**
-         * TODO: No metadata is saved here..
-         * 
-         * @see SubImg
-         * 
-         */
-        public SubLabeling(Labeling<L> src, Interval interval,
-                        boolean keepDimsWithSizeOne) {
-                super(SubImg.getView(src, interval, keepDimsWithSizeOne));
-                m_src = src;
-                m_origin = new long[interval.numDimensions()];
-                interval.min(m_origin);
-                m_strategy = new DefaultROIStrategy<L, Labeling<L>>(this);
-        }
+	/**
+	 * TODO: No metadata is saved here..
+	 * 
+	 * @see SubImg
+	 * 
+	 */
+	public SubLabeling( Labeling< L > src, Interval interval, boolean keepDimsWithSizeOne )
+	{
+		super( SubImg.getView( src, interval, keepDimsWithSizeOne ) );
+		m_src = src;
+		m_origin = new long[ interval.numDimensions() ];
+		interval.min( m_origin );
+		m_strategy = new DefaultROIStrategy< L, Labeling< L >>( this );
+	}
 
-        /**
-         * TODO: No metadata is saved here..
-         * 
-         * @see SubImg
-         */
-        public SubLabeling(Labeling<L> src, Interval interval) {
-                this(src, interval, false);
-        }
+	/**
+	 * TODO: No metadata is saved here..
+	 * 
+	 * @see SubImg
+	 */
+	public SubLabeling( Labeling< L > src, Interval interval )
+	{
+		this( src, interval, false );
+	}
 
-        @Override
-        public boolean getExtents(L label, long[] minExtents, long[] maxExtents) {
-                return m_strategy.getExtents(label, minExtents, maxExtents);
-        }
+	@Override
+	public boolean getExtents( L label, long[] minExtents, long[] maxExtents )
+	{
+		return m_strategy.getExtents( label, minExtents, maxExtents );
+	}
 
-        @Override
-        public boolean getRasterStart(L label, long[] start) {
-                return m_strategy.getRasterStart(label, start);
-        }
+	@Override
+	public boolean getRasterStart( L label, long[] start )
+	{
+		return m_strategy.getRasterStart( label, start );
+	}
 
-        @Override
-        public long getArea(L label) {
-                return m_strategy.getArea(label);
-        }
+	@Override
+	public long getArea( L label )
+	{
+		return m_strategy.getArea( label );
+	}
 
-        @Override
-        public Collection<L> getLabels() {
-                return m_strategy.getLabels();
-        }
+	@Override
+	public Collection< L > getLabels()
+	{
+		return m_strategy.getLabels();
+	}
 
-        @Override
-        public RegionOfInterest getRegionOfInterest(L label) {
-                return m_strategy.createRegionOfInterest(label);
-        }
+	@Override
+	public RegionOfInterest getRegionOfInterest( L label )
+	{
+		return m_strategy.createRegionOfInterest( label );
+	}
 
-        @Override
-        public IterableRegionOfInterest getIterableRegionOfInterest(L label) {
-                return m_strategy.createIterableRegionOfInterest(label);
-        }
+	@Override
+	public IterableRegionOfInterest getIterableRegionOfInterest( L label )
+	{
+		return m_strategy.createIterableRegionOfInterest( label );
+	}
 
-        public final void getOrigin(long[] origin) {
-                for (int d = 0; d < origin.length; d++)
-                        origin[d] = m_origin[d];
-        }
+	public final void getOrigin( long[] origin )
+	{
+		for ( int d = 0; d < origin.length; d++ )
+			origin[ d ] = m_origin[ d ];
+	}
 
-        public final long getOrigin(int d) {
-                return m_origin[d];
-        }
+	public final long getOrigin( int d )
+	{
+		return m_origin[ d ];
+	}
 
-        @Override
-        public Labeling<L> copy() {
-                throw new UnsupportedOperationException("TODO");
-        }
+	@Override
+	public Labeling< L > copy()
+	{
+		throw new UnsupportedOperationException( "TODO" );
+	}
 
-        @Override
-        public <LL extends Comparable<LL>> LabelingFactory<LL> factory() {
-                throw new UnsupportedOperationException("TODO");
-        }
+	@Override
+	public < LL extends Comparable< LL >> LabelingFactory< LL > factory()
+	{
+		throw new UnsupportedOperationException( "TODO" );
+	}
 
-        public Labeling<L> getSrc() {
-                return m_src;
-        }
+	public Labeling< L > getSrc()
+	{
+		return m_src;
+	}
 }

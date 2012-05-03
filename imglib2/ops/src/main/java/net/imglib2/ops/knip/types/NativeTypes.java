@@ -67,132 +67,157 @@ import net.imglib2.type.numeric.real.FloatType;
  * 
  * @author Christian Dietz, University of Konstanz
  */
-public enum NativeTypes {
+public enum NativeTypes
+{
 
-        /**
+	/**
 	 * 
 	 */
-        BITTYPE(false),
+	BITTYPE( false ),
 
-        /**
+	/**
 	 * 
 	 */
-        BYTETYPE(true),
-        /**
+	BYTETYPE( true ),
+	/**
 	 * 
 	 */
-        SHORTTYPE(true),
-        /**
+	SHORTTYPE( true ),
+	/**
 	 * 
 	 */
-        INTTYPE(true),
-        /**
+	INTTYPE( true ),
+	/**
 	 * 
 	 */
-        LONGTYPE(true),
-        /**
+	LONGTYPE( true ),
+	/**
 	 * 
 	 */
-        DOUBLETYPE(true),
-        /**
+	DOUBLETYPE( true ),
+	/**
 	 * 
 	 */
-        FLOATTYPE(true),
-        /**
+	FLOATTYPE( true ),
+	/**
 	 * 
 	 */
-        UNSIGNED12BITTYPE(false),
-        /**
+	UNSIGNED12BITTYPE( false ),
+	/**
 	 * 
 	 */
-        UNSIGNEDBYTETYPE(false),
-        /**
+	UNSIGNEDBYTETYPE( false ),
+	/**
 	 * 
 	 */
-        UNSIGNEDINTTYPE(false),
-        /**
+	UNSIGNEDINTTYPE( false ),
+	/**
 	 * 
 	 */
-        UNSIGNEDSHORTTYPE(false);
+	UNSIGNEDSHORTTYPE( false );
 
-        // indicates if type is signed
-        private boolean m_isSigned;
+	// indicates if type is signed
+	private boolean m_isSigned;
 
-        public final Type<?> getTypeInstance() {
-                return NativeTypes.getTypeInstance(this);
-        }
+	public final Type< ? > getTypeInstance()
+	{
+		return NativeTypes.getTypeInstance( this );
+	}
 
-        private NativeTypes(boolean isSigned) {
-                m_isSigned = isSigned;
-        }
+	private NativeTypes( boolean isSigned )
+	{
+		m_isSigned = isSigned;
+	}
 
-        public static final Type<?> getTypeInstance(final NativeTypes type) {
-                switch (type) {
-                case BITTYPE:
-                        return new BitType();
-                case BYTETYPE:
-                        return new ByteType();
-                case DOUBLETYPE:
-                        return new DoubleType();
-                case FLOATTYPE:
-                        return new FloatType();
-                case INTTYPE:
-                        return new IntType();
-                case LONGTYPE:
-                        return new LongType();
-                case SHORTTYPE:
-                        return new ShortType();
-                case UNSIGNED12BITTYPE:
-                        return new Unsigned12BitType();
-                case UNSIGNEDBYTETYPE:
-                        return new UnsignedByteType();
-                case UNSIGNEDINTTYPE:
-                        return new UnsignedIntType();
-                case UNSIGNEDSHORTTYPE:
-                        return new UnsignedShortType();
-                default:
-                        throw new IllegalArgumentException(
-                                        "Unsupported Pixeltype.");
-                }
-        }
+	public static final Type< ? > getTypeInstance( final NativeTypes type )
+	{
+		switch ( type )
+		{
+		case BITTYPE:
+			return new BitType();
+		case BYTETYPE:
+			return new ByteType();
+		case DOUBLETYPE:
+			return new DoubleType();
+		case FLOATTYPE:
+			return new FloatType();
+		case INTTYPE:
+			return new IntType();
+		case LONGTYPE:
+			return new LongType();
+		case SHORTTYPE:
+			return new ShortType();
+		case UNSIGNED12BITTYPE:
+			return new Unsigned12BitType();
+		case UNSIGNEDBYTETYPE:
+			return new UnsignedByteType();
+		case UNSIGNEDINTTYPE:
+			return new UnsignedIntType();
+		case UNSIGNEDSHORTTYPE:
+			return new UnsignedShortType();
+		default:
+			throw new IllegalArgumentException( "Unsupported Pixeltype." );
+		}
+	}
 
-        public static final NativeTypes getPixelType(Type<?> val) {
-                if (val instanceof BitType) {
-                        return BITTYPE;
-                } else if (val instanceof ByteType) {
-                        return BYTETYPE;
-                } else if (val instanceof IntType) {
-                        return INTTYPE;
-                } else if (val instanceof ShortType) {
-                        return SHORTTYPE;
-                } else if (val instanceof FloatType) {
-                        return FLOATTYPE;
-                } else if (val instanceof DoubleType) {
-                        return DOUBLETYPE;
-                } else if (val instanceof LongType) {
-                        return LONGTYPE;
-                } else if (val instanceof UnsignedByteType) {
-                        return UNSIGNEDBYTETYPE;
-                } else if (val instanceof UnsignedIntType) {
-                        return UNSIGNEDINTTYPE;
-                } else if (val instanceof UnsignedShortType) {
-                        return UNSIGNEDSHORTTYPE;
-                } else if (val instanceof Unsigned12BitType) {
-                        return NativeTypes.UNSIGNED12BITTYPE;
-                } else
-                        throw new UnsupportedOperationException(val.getClass()
-                                        .getSimpleName()
-                                        + " can not be serialized yet.");
-        }
+	public static final NativeTypes getPixelType( Type< ? > val )
+	{
+		if ( val instanceof BitType )
+		{
+			return BITTYPE;
+		}
+		else if ( val instanceof ByteType )
+		{
+			return BYTETYPE;
+		}
+		else if ( val instanceof IntType )
+		{
+			return INTTYPE;
+		}
+		else if ( val instanceof ShortType )
+		{
+			return SHORTTYPE;
+		}
+		else if ( val instanceof FloatType )
+		{
+			return FLOATTYPE;
+		}
+		else if ( val instanceof DoubleType )
+		{
+			return DOUBLETYPE;
+		}
+		else if ( val instanceof LongType )
+		{
+			return LONGTYPE;
+		}
+		else if ( val instanceof UnsignedByteType )
+		{
+			return UNSIGNEDBYTETYPE;
+		}
+		else if ( val instanceof UnsignedIntType )
+		{
+			return UNSIGNEDINTTYPE;
+		}
+		else if ( val instanceof UnsignedShortType )
+		{
+			return UNSIGNEDSHORTTYPE;
+		}
+		else if ( val instanceof Unsigned12BitType )
+		{
+			return NativeTypes.UNSIGNED12BITTYPE;
+		}
+		else
+			throw new UnsupportedOperationException( val.getClass().getSimpleName() + " can not be serialized yet." );
+	}
 
-        public boolean isSigned() {
-                return m_isSigned;
-        }
+	public boolean isSigned()
+	{
+		return m_isSigned;
+	}
 
-        public static NativeTypes[] intTypeValues() {
-                return new NativeTypes[] { BITTYPE, BYTETYPE, SHORTTYPE,
-                                INTTYPE, UNSIGNEDBYTETYPE, UNSIGNEDINTTYPE,
-                                UNSIGNEDSHORTTYPE, LONGTYPE };
-        }
+	public static NativeTypes[] intTypeValues()
+	{
+		return new NativeTypes[] { BITTYPE, BYTETYPE, SHORTTYPE, INTTYPE, UNSIGNEDBYTETYPE, UNSIGNEDINTTYPE, UNSIGNEDSHORTTYPE, LONGTYPE };
+	}
 
 }

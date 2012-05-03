@@ -60,21 +60,22 @@ import net.imglib2.type.numeric.RealType;
  * 
  * @author hornm, University of Konstanz
  */
-public class IterableIntervalCopy<T extends RealType<T>> implements
-                UnaryOperation<IterableInterval<T>, IterableInterval<T>> {
+public class IterableIntervalCopy< T extends RealType< T >> implements UnaryOperation< IterableInterval< T >, IterableInterval< T >>
+{
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public IterableInterval<T> compute(IterableInterval<T> op,
-                        IterableInterval<T> r) {
-                new UnaryOperationAssignment(new RealCopy()).compute(op, r);
-                return r;
-        }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public IterableInterval< T > compute( IterableInterval< T > op, IterableInterval< T > r )
+	{
+		new UnaryOperationAssignment< T, T >( new RealCopy< T, T >() ).compute( op, r );
+		return r;
+	}
 
-        @Override
-        public UnaryOperation<IterableInterval<T>, IterableInterval<T>> copy() {
-                return new IterableIntervalCopy<T>();
-        }
+	@Override
+	public UnaryOperation< IterableInterval< T >, IterableInterval< T >> copy()
+	{
+		return new IterableIntervalCopy< T >();
+	}
 }

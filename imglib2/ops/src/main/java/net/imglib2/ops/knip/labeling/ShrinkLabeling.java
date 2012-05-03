@@ -18,7 +18,7 @@ import net.imglib2.view.Views;
 /**
  * Shrinks a labeling
  * 
- * @author Christian Dietz
+ * @author dietzc
  * 
  * @param <L>
  */

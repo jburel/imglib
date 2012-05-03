@@ -57,14 +57,15 @@ import java.util.List;
  * 
  * @author dietzc, hornm, University of Konstanz
  */
-public interface LabelFilter<L extends Comparable<L>> extends Externalizable {
-        /**
-         * @param labels
-         *                is a empty list, if all labels have been filtered out
-         * @return
-         */
-        List<L> filterLabeling(List<L> labels);
+public interface LabelFilter< L extends Comparable< L >> extends Externalizable
+{
+	/**
+	 * @param labels
+	 *            is a empty list, if all labels have been filtered out
+	 * @return
+	 */
+	List< L > filterLabeling( List< L > labels );
 
-        void clear();
+	void clear();
 
 }

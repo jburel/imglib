@@ -3,25 +3,28 @@ package net.imglib2.ops.knip.iterable;
 import net.imglib2.ops.UnaryOperation;
 import net.imglib2.type.numeric.RealType;
 
-public class Min<T extends RealType<T>> implements
-                UnaryOperation<Iterable<T>, T> {
+public class Min< T extends RealType< T >> implements UnaryOperation< Iterable< T >, T >
+{
 
-        @Override
-        public T compute(Iterable<T> input, T output) {
-                double min = Double.MAX_VALUE;
-                for (T in : input) {
-                        if (in.getRealDouble() < min)
-                                min = in.getRealDouble();
-                }
+	@Override
+	public T compute( Iterable< T > input, T output )
+	{
+		double min = Double.MAX_VALUE;
+		for ( T in : input )
+		{
+			if ( in.getRealDouble() < min )
+				min = in.getRealDouble();
+		}
 
-                output.setReal(min);
+		output.setReal( min );
 
-                return output;
-        }
+		return output;
+	}
 
-        @Override
-        public UnaryOperation<Iterable<T>, T> copy() {
-                return new Min<T>();
-        }
+	@Override
+	public UnaryOperation< Iterable< T >, T > copy()
+	{
+		return new Min< T >();
+	}
 
 }

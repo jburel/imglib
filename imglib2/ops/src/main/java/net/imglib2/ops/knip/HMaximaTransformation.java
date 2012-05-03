@@ -60,52 +60,61 @@ import net.imglib2.type.numeric.RealType;
  * 
  * @author metznerj, University of Konstanz
  */
-public class HMaximaTransformation<T extends RealType<T>, K extends IterableInterval<T>>
-                implements UnaryOperation<K, K> {
+public class HMaximaTransformation< T extends RealType< T >, K extends IterableInterval< T >> implements UnaryOperation< K, K >
+{
 
-        /**
+	/**
 	 * 
 	 */
-        public int m_lambda = 0;
+	public int m_lambda = 0;
 
-        public HMaximaTransformation(final int lambda) {
-                m_lambda = lambda;
-        }
+	public HMaximaTransformation( final int lambda )
+	{
+		m_lambda = lambda;
+	}
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public K compute(final K src, final K res) {
-                final Cursor<T> srcCursor = src.localizingCursor();
-                final Cursor<T> resCursor = res.localizingCursor();
-                double max = Double.MIN_VALUE;
-                while (srcCursor.hasNext()) {
-                        final double v = srcCursor.next().getRealDouble();
-                        if (max < v) {
-                                max = v;
-                        }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public K compute( final K src, final K res )
+	{
+		final Cursor< T > srcCursor = src.localizingCursor();
+		final Cursor< T > resCursor = res.localizingCursor();
+		double max = Double.MIN_VALUE;
+		while ( srcCursor.hasNext() )
+		{
+			final double v = srcCursor.next().getRealDouble();
+			if ( max < v )
+			{
+				max = v;
+			}
 
-                }
-                srcCursor.reset();
+		}
+		srcCursor.reset();
 
-                final double tresh = max - m_lambda;
+		final double tresh = max - m_lambda;
 
-                while (srcCursor.hasNext() && resCursor.hasNext()) {
-                        resCursor.fwd();
-                        final double v = srcCursor.next().getRealDouble();
-                        if (tresh < v) {
-                                resCursor.get().setReal(tresh);
-                        } else {
-                                resCursor.get().setReal(v);
+		while ( srcCursor.hasNext() && resCursor.hasNext() )
+		{
+			resCursor.fwd();
+			final double v = srcCursor.next().getRealDouble();
+			if ( tresh < v )
+			{
+				resCursor.get().setReal( tresh );
+			}
+			else
+			{
+				resCursor.get().setReal( v );
 
-                        }
-                }
-                return res;
-        }
+			}
+		}
+		return res;
+	}
 
-        @Override
-        public UnaryOperation<K, K> copy() {
-                return new HMaximaTransformation<T, K>(m_lambda);
-        }
+	@Override
+	public UnaryOperation< K, K > copy()
+	{
+		return new HMaximaTransformation< T, K >( m_lambda );
+	}
 }

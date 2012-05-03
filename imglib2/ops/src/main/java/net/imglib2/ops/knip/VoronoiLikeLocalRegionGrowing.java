@@ -64,66 +64,67 @@ import net.imglib2.type.Type;
  * 
  * @author hornm, University of Konstanz
  */
-public class VoronoiLikeLocalRegionGrowing<L extends Comparable<L>, T extends Type<T> & Comparable<T>>
-                extends VoronoiLikeRegionGrowing<L, T> {
+public class VoronoiLikeLocalRegionGrowing< L extends Comparable< L >, T extends Type< T > & Comparable< T >> extends VoronoiLikeRegionGrowing< L, T >
+{
 
-        private Img<T> m_srcImg;
+	private Img< T > m_srcImg;
 
-        private RandomAccess<T> m_srcImgRA;
+	private RandomAccess< T > m_srcImgRA;
 
-        /**
-         * @param m_srcImg
-         * @param threshold
-         *                stops growing if the pixel value falls below that
-         *                value
-         * @param fillHoles
-         *                fills the wholes in a post-processing step within
-         *                segments of the same label
-         */
-        public VoronoiLikeLocalRegionGrowing(Img<T> srcImg, boolean fillHoles) {
-                super(srcImg, srcImg.firstElement().createVariable(), fillHoles);
-                m_srcImg = srcImg;
-                m_srcImgRA = m_srcImg.randomAccess();
+	/**
+	 * @param m_srcImg
+	 * @param threshold
+	 *            stops growing if the pixel value falls below that value
+	 * @param fillHoles
+	 *            fills the wholes in a post-processing step within segments of
+	 *            the same label
+	 */
+	public VoronoiLikeLocalRegionGrowing( Img< T > srcImg, boolean fillHoles )
+	{
+		super( srcImg, srcImg.firstElement().createVariable(), fillHoles );
+		m_srcImg = srcImg;
+		m_srcImgRA = m_srcImg.randomAccess();
 
-        }
+	}
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected void initRegionGrowing(Labeling<L> srcLab) {
-                super.initRegionGrowing(srcLab);
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected void initRegionGrowing( Labeling< L > srcLab )
+	{
+		super.initRegionGrowing( srcLab );
 
-                // determine the local threshold for each region by means of the
-                // seeding
-                // regions
-                Collection<L> labels = srcLab.getLabels();
-                // Map<L, T> thresholdMap = new HashMap<L, T>();
-                for (L label : labels) {
-                        Cursor<T> cur = srcLab
-                                        .getIterableRegionOfInterest(label)
-                                        .getIterableIntervalOverROI(m_srcImg)
-                                        .localizingCursor();
-                        while (cur.hasNext()) {
-                                cur.fwd();
-                        }
-                }
+		// determine the local threshold for each region by means of the
+		// seeding
+		// regions
+		Collection< L > labels = srcLab.getLabels();
+		// Map<L, T> thresholdMap = new HashMap<L, T>();
+		for ( L label : labels )
+		{
+			Cursor< T > cur = srcLab.getIterableRegionOfInterest( label ).getIterableIntervalOverROI( m_srcImg ).localizingCursor();
+			while ( cur.hasNext() )
+			{
+				cur.fwd();
+			}
+		}
 
-        }
+	}
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        protected boolean includeInRegion(int[] oldPos, int[] nextPos, L label) {
-                m_srcImgRA.setPosition(nextPos);
-                return false;
-        }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	protected boolean includeInRegion( int[] oldPos, int[] nextPos, L label )
+	{
+		m_srcImgRA.setPosition( nextPos );
+		return false;
+	}
 
-        @Override
-        public UnaryOperation<Labeling<L>, Labeling<L>> copy() {
-                return new VoronoiLikeLocalRegionGrowing<L, T>(m_srcImg,
-                                m_fillHoles);
+	@Override
+	public UnaryOperation< Labeling< L >, Labeling< L >> copy()
+	{
+		return new VoronoiLikeLocalRegionGrowing< L, T >( m_srcImg, m_fillHoles );
 
-        }
+	}
 }

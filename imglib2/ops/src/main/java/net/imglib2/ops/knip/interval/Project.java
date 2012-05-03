@@ -60,153 +60,164 @@ import net.imglib2.type.numeric.RealType;
 
 /**
  * Img projection.
- *
+ * 
  * @author dietzc, hornm, University of Konstanz
  */
-public class Project<T extends RealType<T>> implements
-                UnaryOutputOperation<Img<T>, Img<T>> {
+public class Project< T extends RealType< T >> implements UnaryOutputOperation< Img< T >, Img< T >>
+{
 
-        /**
-         * Different projection types which can be used by ImageJ
-         */
-        public enum ProjectionType {
-                MAX_INTENSITY, MEDIAN_INTENSITY, AVG_INTENSITY, MIN_INTENSITY;
-        }
+	/**
+	 * Different projection types which can be used by ImageJ
+	 */
+	public enum ProjectionType
+	{
+		MAX_INTENSITY, MEDIAN_INTENSITY, AVG_INTENSITY, MIN_INTENSITY;
+	}
 
-        /* Type of projection */
-        private final ProjectionType m_projectionType;
+	/* Type of projection */
+	private final ProjectionType m_projectionType;
 
-        /* Dimension of projection */
-        private final int m_projectionDim;
+	/* Dimension of projection */
+	private final int m_projectionDim;
 
-        /**
-         * Projects the pixels onto all dimensions in the direction of
-         * <code>projectionDim</code>
-         *
-         * @param type
-         * @param imgFactory
-         * @param projectionDim
-         */
-        public Project(ProjectionType type, int projectionDim) {
-                m_projectionDim = projectionDim;
-                m_projectionType = type;
-        }
+	/**
+	 * Projects the pixels onto all dimensions in the direction of
+	 * <code>projectionDim</code>
+	 * 
+	 * @param type
+	 * @param imgFactory
+	 * @param projectionDim
+	 */
+	public Project( ProjectionType type, int projectionDim )
+	{
+		m_projectionDim = projectionDim;
+		m_projectionType = type;
+	}
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Img<T> createEmptyOutput(Img<T> op) {
-                /* The new dimensions of the projected image */
-                long[] projectedImgDimSizes = new long[op.numDimensions() - 1];
-                for (int d = 0; d < op.numDimensions(); d++) {
-                        if (d < m_projectionDim) {
-                                projectedImgDimSizes[d] = op.dimension(d);
-                        }
-                        if (d > m_projectionDim) {
-                                projectedImgDimSizes[d - 1] = op.dimension(d);
-                        }
-                }
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Img< T > createEmptyOutput( Img< T > op )
+	{
+		/* The new dimensions of the projected image */
+		long[] projectedImgDimSizes = new long[ op.numDimensions() - 1 ];
+		for ( int d = 0; d < op.numDimensions(); d++ )
+		{
+			if ( d < m_projectionDim )
+			{
+				projectedImgDimSizes[ d ] = op.dimension( d );
+			}
+			if ( d > m_projectionDim )
+			{
+				projectedImgDimSizes[ d - 1 ] = op.dimension( d );
+			}
+		}
 
-                /* The projected Image */
-                Img<T> projectedImage = op.factory().create(
-                                projectedImgDimSizes,
-                                op.randomAccess().get().createVariable());
+		/* The projected Image */
+		Img< T > projectedImage = op.factory().create( projectedImgDimSizes, op.randomAccess().get().createVariable() );
 
-                return projectedImage;
-        }
+		return projectedImage;
+	}
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public Img<T> compute(Img<T> op, Img<T> r) {
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public Img< T > compute( Img< T > op, Img< T > r )
+	{
 
-                Cursor<T> projCur = r.localizingCursor();
-                RandomAccess<T> srcRA = op.randomAccess();
+		Cursor< T > projCur = r.localizingCursor();
+		RandomAccess< T > srcRA = op.randomAccess();
 
-                double[] projVec = new double[(int) op
-                                .dimension(m_projectionDim)];
-                while (projCur.hasNext()) {
-                        projCur.fwd();
-                        for (int d = 0; d < op.numDimensions(); d++) {
-                                if (d < m_projectionDim) {
-                                        srcRA.setPosition(projCur
-                                                        .getIntPosition(d), d);
-                                }
-                                if (d > m_projectionDim) {
-                                        srcRA.setPosition(projCur
-                                                        .getIntPosition(d - 1),
-                                                        d);
-                                }
-                        }
-                        for (int projPos = 0; projPos < op
-                                        .dimension(m_projectionDim); projPos++) {
-                                srcRA.setPosition(projPos, m_projectionDim);
-                                projVec[projPos] = srcRA.get().getRealDouble();
-                        }
+		double[] projVec = new double[ ( int ) op.dimension( m_projectionDim ) ];
+		while ( projCur.hasNext() )
+		{
+			projCur.fwd();
+			for ( int d = 0; d < op.numDimensions(); d++ )
+			{
+				if ( d < m_projectionDim )
+				{
+					srcRA.setPosition( projCur.getIntPosition( d ), d );
+				}
+				if ( d > m_projectionDim )
+				{
+					srcRA.setPosition( projCur.getIntPosition( d - 1 ), d );
+				}
+			}
+			for ( int projPos = 0; projPos < op.dimension( m_projectionDim ); projPos++ )
+			{
+				srcRA.setPosition( projPos, m_projectionDim );
+				projVec[ projPos ] = srcRA.get().getRealDouble();
+			}
 
-                        projCur.get().setReal(handleProjection(projVec));
+			projCur.get().setReal( handleProjection( projVec ) );
 
-                }
-                return r;
-        }
+		}
+		return r;
+	}
 
-        /*
-         * Projection is handled according to the projection type m_d has the
-         * size same size as the amount of points which are projected
-         *
-         * @param resultList
-         *
-         * @param type
-         */
-        private final double handleProjection(double[] resultList) {
+	/*
+	 * Projection is handled according to the projection type m_d has the size
+	 * same size as the amount of points which are projected
+	 * 
+	 * @param resultList
+	 * 
+	 * @param type
+	 */
+	private final double handleProjection( double[] resultList )
+	{
 
-                switch (m_projectionType) {
-                case AVG_INTENSITY:
-                        double sum = 0;
-                        for (int i = 0; i < resultList.length; i++) {
-                                sum += resultList[i];
-                        }
-                        return sum / resultList.length;
+		switch ( m_projectionType )
+		{
+		case AVG_INTENSITY:
+			double sum = 0;
+			for ( int i = 0; i < resultList.length; i++ )
+			{
+				sum += resultList[ i ];
+			}
+			return sum / resultList.length;
 
-                case MEDIAN_INTENSITY:
+		case MEDIAN_INTENSITY:
 
-                        Arrays.sort(resultList);
-                        return resultList[resultList.length / 2];
+			Arrays.sort( resultList );
+			return resultList[ resultList.length / 2 ];
 
-                case MAX_INTENSITY:
-                        double max = Double.NEGATIVE_INFINITY;
+		case MAX_INTENSITY:
+			double max = Double.NEGATIVE_INFINITY;
 
-                        for (int i = 0; i < resultList.length; i++) {
-                                max = Math.max(max, resultList[i]);
-                        }
+			for ( int i = 0; i < resultList.length; i++ )
+			{
+				max = Math.max( max, resultList[ i ] );
+			}
 
-                        return max;
+			return max;
 
-                case MIN_INTENSITY:
-                        double min = Double.POSITIVE_INFINITY;
+		case MIN_INTENSITY:
+			double min = Double.POSITIVE_INFINITY;
 
-                        for (int i = 0; i < resultList.length; i++) {
-                                min = Math.min(min, resultList[i]);
-                        }
+			for ( int i = 0; i < resultList.length; i++ )
+			{
+				min = Math.min( min, resultList[ i ] );
+			}
 
-                        return min;
+			return min;
 
-                default:
-                        throw new IllegalArgumentException(
-                                        "Projection Method doesn't exist");
-                }
-        }
+		default:
+			throw new IllegalArgumentException( "Projection Method doesn't exist" );
+		}
+	}
 
-        @Override
-        public UnaryOutputOperation<Img<T>, Img<T>> copy() {
-                return new Project<T>(m_projectionType, m_projectionDim);
-        }
+	@Override
+	public UnaryOutputOperation< Img< T >, Img< T >> copy()
+	{
+		return new Project< T >( m_projectionType, m_projectionDim );
+	}
 
-        @Override
-        public Img<T> compute(Img<T> arg0) {
-                return compute(arg0, createEmptyOutput(arg0));
-        }
+	@Override
+	public Img< T > compute( Img< T > arg0 )
+	{
+		return compute( arg0, createEmptyOutput( arg0 ) );
+	}
 
 }

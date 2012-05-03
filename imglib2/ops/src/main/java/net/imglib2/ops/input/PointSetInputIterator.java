@@ -44,32 +44,37 @@ import net.imglib2.ops.PointSet;
  * 
  * @author Barry DeZonia
  */
-public class PointSetInputIterator implements InputIterator<PointSet> {
+public class PointSetInputIterator implements InputIterator< PointSet >
+{
 
 	private final PointSet subspace;
 	private final PointInputIterator iter;
 	private long[] pos;
-	
-	public PointSetInputIterator(PointSet space, PointSet subspace) {
-		iter = new PointInputIterator(space);
+
+	public PointSetInputIterator( PointSet space, PointSet subspace )
+	{
+		iter = new PointInputIterator( space );
 		this.subspace = subspace;
 		pos = null;
 	}
-	
+
 	@Override
-	public boolean hasNext() {
+	public boolean hasNext()
+	{
 		return iter.hasNext();
 	}
 
 	@Override
-	public PointSet next(PointSet currVal) {
-		pos = iter.next(pos);
-		subspace.setAnchor(pos);
+	public PointSet next( PointSet currVal )
+	{
+		pos = iter.next( pos );
+		subspace.setAnchor( pos );
 		return subspace;
 	}
 
 	@Override
-	public long[] getCurrentPoint() {
+	public long[] getCurrentPoint()
+	{
 		return iter.getCurrentPoint();
 	}
 

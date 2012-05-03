@@ -64,90 +64,102 @@ import net.imglib2.type.Type;
 /**
  * Reduces the dimensions of an image by removing all dimensions having only one
  * pixel.
- *
+ * 
  * @author hornm, University of Konstanz
  */
-public class Remove1Dims<T extends Type<T>> implements
-                UnaryOutputOperation<ImgPlus<T>, ImgPlus<T>> {
+public class Remove1Dims< T extends Type< T >> implements UnaryOutputOperation< ImgPlus< T >, ImgPlus< T >>
+{
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public ImgPlus<T> createEmptyOutput(ImgPlus<T> op) {
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ImgPlus< T > createEmptyOutput( ImgPlus< T > op )
+	{
 
-                BitSet isLength1 = new BitSet(op.numDimensions());
-                for (int d = 0; d < op.numDimensions(); d++) {
-                        if (op.dimension(d) == 1) {
-                                isLength1.set(d);
-                        }
-                }
+		BitSet isLength1 = new BitSet( op.numDimensions() );
+		for ( int d = 0; d < op.numDimensions(); d++ )
+		{
+			if ( op.dimension( d ) == 1 )
+			{
+				isLength1.set( d );
+			}
+		}
 
-                long[] min = new long[op.numDimensions()
-                                - isLength1.cardinality()];
-                long[] max = new long[min.length];
+		long[] min = new long[ op.numDimensions() - isLength1.cardinality() ];
+		long[] max = new long[ min.length ];
 
-                int d = 0;
-                for (int i = 0; i < op.numDimensions(); i++) {
-                        if (!isLength1.get(i)) {
-                                max[d] = op.dimension(i) - 1;
-                                d++;
-                        }
-                }
-                Img<T> res = op.factory().create(new FinalInterval(min, max),
-                                op.firstElement().createVariable());
-                return new ImgPlus<T>(res);
-        }
+		int d = 0;
+		for ( int i = 0; i < op.numDimensions(); i++ )
+		{
+			if ( !isLength1.get( i ) )
+			{
+				max[ d ] = op.dimension( i ) - 1;
+				d++;
+			}
+		}
+		Img< T > res = op.factory().create( new FinalInterval( min, max ), op.firstElement().createVariable() );
+		return new ImgPlus< T >( res );
+	}
 
-        /**
-         * {@inheritDoc}
-         */
-        @Override
-        public ImgPlus<T> compute(ImgPlus<T> op, ImgPlus<T> r) {
-                Cursor<T> srcCur = op.localizingCursor();
-                RandomAccess<T> resRA = r.randomAccess();
+	/**
+	 * {@inheritDoc}
+	 */
+	@Override
+	public ImgPlus< T > compute( ImgPlus< T > op, ImgPlus< T > r )
+	{
+		Cursor< T > srcCur = op.localizingCursor();
+		RandomAccess< T > resRA = r.randomAccess();
 
-                // TODO: Copy metadata?! Done for name, calibration and axis
-                r.setName(op.getName());
+		// TODO: Copy metadata?! Done for name, calibration and axis
+		r.setName( op.getName() );
 
-                int rDim = 0;
-                BitSet isLength1 = new BitSet(op.numDimensions());
-                for (int d = 0; d < op.numDimensions(); d++) {
-                        if (op.dimension(d) == 1) {
-                                isLength1.set(d);
-                        } else {
-                                r.setAxis(Axes.get(op.axis(d).getLabel()), rDim);
-                                r.setCalibration(op.calibration(d), rDim);
-                                rDim++;
-                        }
+		int rDim = 0;
+		BitSet isLength1 = new BitSet( op.numDimensions() );
+		for ( int d = 0; d < op.numDimensions(); d++ )
+		{
+			if ( op.dimension( d ) == 1 )
+			{
+				isLength1.set( d );
+			}
+			else
+			{
+				r.setAxis( Axes.get( op.axis( d ).getLabel() ), rDim );
+				r.setCalibration( op.calibration( d ), rDim );
+				rDim++;
+			}
 
-                }
+		}
 
-                int d;
-                while (srcCur.hasNext()) {
-                        srcCur.fwd();
-                        d = 0;
-                        for (int i = 0; i < op.numDimensions(); i++) {
-                                if (!isLength1.get(i)) {
-                                        resRA.setPosition(srcCur
-                                                        .getLongPosition(i), d);
-                                        d++;
-                                }
-                        }
-                        resRA.get().set(srcCur.get());
+		int d;
+		while ( srcCur.hasNext() )
+		{
+			srcCur.fwd();
+			d = 0;
+			for ( int i = 0; i < op.numDimensions(); i++ )
+			{
+				if ( !isLength1.get( i ) )
+				{
+					resRA.setPosition( srcCur.getLongPosition( i ), d );
+					d++;
+				}
+			}
+			resRA.get().set( srcCur.get() );
 
-                }
-                return r;
-        }
+		}
+		return r;
+	}
 
-        @Override
-        public UnaryOutputOperation<ImgPlus<T>, ImgPlus<T>> copy() {
-                return new Remove1Dims<T>();
-        }
+	@Override
+	public UnaryOutputOperation< ImgPlus< T >, ImgPlus< T >> copy()
+	{
+		return new Remove1Dims< T >();
+	}
 
-        @Override
-        public ImgPlus<T> compute(ImgPlus<T> op) {
-                return compute(op, createEmptyOutput(op));
-        }
+	@Override
+	public ImgPlus< T > compute( ImgPlus< T > op )
+	{
+		return compute( op, createEmptyOutput( op ) );
+	}
 
 }

@@ -60,74 +60,89 @@ import net.imglib2.img.sparse.NtreeImgFactory;
 import net.imglib2.type.NativeType;
 import net.imglib2.type.Type;
 
-public enum ImgFactoryTypes {
+public enum ImgFactoryTypes
+{
 
-        ARRAY_IMG_FACTORY, PLANAR_IMG_FACTORY, CELL_IMG_FACTORY, LIST_IMG_FACTORY, BYPASS_FACTORY, NTREE_IMG_FACTORY;
+	ARRAY_IMG_FACTORY, PLANAR_IMG_FACTORY, CELL_IMG_FACTORY, LIST_IMG_FACTORY, BYPASS_FACTORY, NTREE_IMG_FACTORY;
 
-        /**
-         * @return
-         */
-        @SuppressWarnings("rawtypes")
-        public static final <T extends NativeType<T>> ImgFactory getImgFactory(
-                        ImgFactoryTypes facType, Img img) {
+	/**
+	 * @return
+	 */
+	@SuppressWarnings( "rawtypes" )
+	public static final < T extends NativeType< T >> ImgFactory getImgFactory( ImgFactoryTypes facType, Img img )
+	{
 
-                if (facType == BYPASS_FACTORY) {
-                        return img.factory();
-                } else {
-                        return ImgFactoryTypes.<T> getImgFactory(facType);
-                }
+		if ( facType == BYPASS_FACTORY )
+		{
+			return img.factory();
+		}
+		else
+		{
+			return ImgFactoryTypes.< T >getImgFactory( facType );
+		}
 
-        }
+	}
 
-        public static final <T extends Type<T>> ImgFactoryTypes getImgFactoryType(
-                        ImgFactory<T> factory) {
-                if (factory instanceof ArrayImgFactory) {
-                        return ARRAY_IMG_FACTORY;
-                } else if (factory instanceof PlanarImgFactory) {
-                        return PLANAR_IMG_FACTORY;
-                } else if (factory instanceof CellImgFactory) {
-                        return CELL_IMG_FACTORY;
-                } else if (factory instanceof ListImgFactory) {
-                        return LIST_IMG_FACTORY;
-                } else if (factory instanceof NtreeImgFactory) {
-                        return NTREE_IMG_FACTORY;
-                } else {
-                        throw new UnsupportedOperationException(
-                                        "Serializing an image with the specified storage strategy isn't supported, yet.");
-                }
-        }
+	public static final < T extends Type< T >> ImgFactoryTypes getImgFactoryType( ImgFactory< T > factory )
+	{
+		if ( factory instanceof ArrayImgFactory )
+		{
+			return ARRAY_IMG_FACTORY;
+		}
+		else if ( factory instanceof PlanarImgFactory )
+		{
+			return PLANAR_IMG_FACTORY;
+		}
+		else if ( factory instanceof CellImgFactory )
+		{
+			return CELL_IMG_FACTORY;
+		}
+		else if ( factory instanceof ListImgFactory )
+		{
+			return LIST_IMG_FACTORY;
+		}
+		else if ( factory instanceof NtreeImgFactory )
+		{
+			return NTREE_IMG_FACTORY;
+		}
+		else
+		{
+			throw new UnsupportedOperationException( "Serializing an image with the specified storage strategy isn't supported, yet." );
+		}
+	}
 
-        /**
-         * @return
-         */
-        public static final <T extends NativeType<T>> ImgFactory<T> getImgFactory(
-                        ImgFactoryTypes facType) {
+	/**
+	 * @return
+	 */
+	public static final < T extends NativeType< T >> ImgFactory< T > getImgFactory( ImgFactoryTypes facType )
+	{
 
-                switch (facType) {
-                case ARRAY_IMG_FACTORY:
-                        return new ArrayImgFactory<T>();
-                case CELL_IMG_FACTORY:
-                        return new CellImgFactory<T>();
-                case LIST_IMG_FACTORY:
-                        return new ListImgFactory<T>();
-                case PLANAR_IMG_FACTORY:
-                        return new PlanarImgFactory<T>();
-                case NTREE_IMG_FACTORY:
-                        return new NtreeImgFactory<T>();
-                default:
-                        return null;
+		switch ( facType )
+		{
+		case ARRAY_IMG_FACTORY:
+			return new ArrayImgFactory< T >();
+		case CELL_IMG_FACTORY:
+			return new CellImgFactory< T >();
+		case LIST_IMG_FACTORY:
+			return new ListImgFactory< T >();
+		case PLANAR_IMG_FACTORY:
+			return new PlanarImgFactory< T >();
+		case NTREE_IMG_FACTORY:
+			return new NtreeImgFactory< T >();
+		default:
+			return null;
 
-                }
-        }
+		}
+	}
 
-        /**
-         * @return
-         */
-        @SuppressWarnings("rawtypes")
-        public static final ImgFactory getImgFactory(String facTypeAsString,
-                        Img img) {
+	/**
+	 * @return
+	 */
+	@SuppressWarnings( "rawtypes" )
+	public static final ImgFactory getImgFactory( String facTypeAsString, Img img )
+	{
 
-                return getImgFactory(valueOf(facTypeAsString), img);
+		return getImgFactory( valueOf( facTypeAsString ), img );
 
-        }
+	}
 }
